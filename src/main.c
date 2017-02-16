@@ -1,7 +1,8 @@
 #include "main.h"
 
 
-int main() {
+int main()
+{
     init();
 
     do {
@@ -9,24 +10,31 @@ int main() {
     } while (1);
 }
 
-void init() {
+void init()
+{
+    // Enable clocks
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1, ENABLE);
+
+    // Init stuff
     initLeds();
     initButton();
     initCan();
 }
 
-void loop() {
+void loop()
+{
     if (GPIO_ReadInputDataBit(GPIOA, USER_BUTTON)) {
 	sendMessage(MFSW_VOL_DOWN);
-        GPIO_SetBits(GPIOG, LEDS);
+        GPIO_SetBits(GPIOD, LEDS);
     } else {
-        GPIO_ResetBits(GPIOG, LEDS);
+        GPIO_ResetBits(GPIOD, LEDS);
     }
 }
 
-void initLeds() {
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
-
+void initLeds()
+{
     GPIO_InitTypeDef gpio;
     GPIO_StructInit(&gpio);
     gpio.GPIO_Mode = GPIO_Mode_OUT;
@@ -34,9 +42,8 @@ void initLeds() {
     GPIO_Init(GPIOD, &gpio);
 }
 
-void initButton() {
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-
+void initButton()
+{
     GPIO_InitTypeDef gpio;
     GPIO_StructInit(&gpio);
     gpio.GPIO_Mode = GPIO_Mode_IN;
@@ -46,23 +53,19 @@ void initButton() {
 
 void initCan()
 {
-    /* Enable CAN clock */
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1, ENABLE);
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-
     GPIO_InitTypeDef gpio;
     CAN_InitTypeDef can;
 
-    gpio.GPIO_Pin   = GPIO_Pin_0|GPIO_Pin_1;
+    gpio.GPIO_Pin   = CAN_RX_PIN | CAN_TX_PIN;
     gpio.GPIO_Mode  = GPIO_Mode_AF;
     gpio.GPIO_OType = GPIO_OType_PP;
     gpio.GPIO_PuPd  = GPIO_PuPd_UP;
     gpio.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOB, &gpio);
+    GPIO_Init(GPIOA, &gpio);
 
     /* Connect CAN_RX & CAN_TX to AF9 */
-    GPIO_PinAFConfig(GPIOB, GPIO_PinSource0, GPIO_AF_CAN1); //CAN_RX = PD0
-    GPIO_PinAFConfig(GPIOB, GPIO_PinSource1, GPIO_AF_CAN1); //CAN_TX = PD1
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource11, GPIO_AF_CAN1); //CAN_RX = PA11
+    GPIO_PinAFConfig(GPIOA, GPIO_PinSource12, GPIO_AF_CAN1); //CAN_TX = PA12
 
     CAN_DeInit(CAN1);
     CAN_StructInit(&can);
@@ -84,7 +87,8 @@ void initCan()
     CAN_Init(CAN1, &can);
 }
 
-void delay(uint32_t ms) {
+void delay(uint32_t ms)
+{
     ms *= 3360;
     while(ms--) {
         __NOP();
@@ -97,10 +101,8 @@ void sendMessage(uint8_t *msg)
 
     TxMessage.RTR = CAN_RTR_DATA;
     TxMessage.IDE = CAN_ID_STD;
-    // Specifies the length of the frame that will be transmitted. This parameter can be a value between 0 and 8
     TxMessage.DLC = sizeof(msg); // 2
 
-    // Specifies the standard identifier. This parameter can be a value between 0 and 0x7FF.
     TxMessage.StdId = 0x5c1;
 
     memcpy(&TxMessage.Data, &msg, sizeof TxMessage.Data);
