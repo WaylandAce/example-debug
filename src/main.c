@@ -46,35 +46,41 @@ void initButton() {
 
 void initCan()
 {
+    /* Enable CAN clock */
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1, ENABLE);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+
     GPIO_InitTypeDef gpio;
     CAN_InitTypeDef can;
 
-    /* Configure CAN1 RX pin */
-    gpio.GPIO_Pin = GPIO_Pin_8;
-    gpio.GPIO_Mode = GPIO_Mode_IN;
-    GPIO_Init(GPIOB, &gpio);
-
-    /* Configure CAN1 TX pin */
-    gpio.GPIO_Pin = GPIO_Pin_9;
-    gpio.GPIO_Mode = GPIO_Mode_AF;
+    gpio.GPIO_Pin   = GPIO_Pin_0|GPIO_Pin_1;
+    gpio.GPIO_Mode  = GPIO_Mode_AF;
+    gpio.GPIO_OType = GPIO_OType_PP;
+    gpio.GPIO_PuPd  = GPIO_PuPd_UP;
     gpio.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOB, &gpio);
 
+    /* Connect CAN_RX & CAN_TX to AF9 */
+    GPIO_PinAFConfig(GPIOB, GPIO_PinSource0, GPIO_AF_CAN1); //CAN_RX = PD0
+    GPIO_PinAFConfig(GPIOB, GPIO_PinSource1, GPIO_AF_CAN1); //CAN_TX = PD1
+
     CAN_DeInit(CAN1);
     CAN_StructInit(&can);
-    can.CAN_TTCM=DISABLE;
-    can.CAN_ABOM=DISABLE;
-    can.CAN_AWUM=DISABLE;
-    can.CAN_NART=DISABLE;
-    can.CAN_RFLM=DISABLE;
-    can.CAN_TXFP=DISABLE;
-    can.CAN_Mode=CAN_Mode_LoopBack;
-    //can.CAN_Mode=CAN_Mode_Normal;
-    can.CAN_SJW=CAN_SJW_1tq;
-    can.CAN_BS1=CAN_BS1_2tq;
-    can.CAN_BS2=CAN_BS2_3tq;
-    can.CAN_Prescaler=48;
+    can.CAN_TTCM = DISABLE;
+    can.CAN_ABOM = DISABLE;
+    can.CAN_AWUM = DISABLE;
+    // can.CAN_NART = DISABLE;
+    can.CAN_NART = ENABLE; // non-automatic retransmission mode = ENABLE (To prevent endless spam)
+    can.CAN_RFLM = DISABLE;
+    can.CAN_TXFP = DISABLE;
+    can.CAN_Mode = CAN_Mode_Normal;
 
+    can.CAN_SJW       = CAN_SJW_1tq; // synchronization jump width = 1
+    can.CAN_BS1       = CAN_BS1_14tq; // 14 time quantum
+    can.CAN_BS2       = CAN_BS2_6tq;
+    can.CAN_Prescaler = 20; // 100 kbit/s
+
+    // Bitrate = CAN_CLK / (CAN_Prescaler * (1 + CAN_BS1 + CAN_BS2 + CAN_SJW)).
     CAN_Init(CAN1, &can);
 }
 
