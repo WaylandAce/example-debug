@@ -1,6 +1,5 @@
 #include "main.h"
 
-static uint8_t lastButtonStatus = RESET;
 
 int main() {
     init();
@@ -17,18 +16,12 @@ void init() {
 }
 
 void loop() {
-    static uint32_t counter = 0;
-
-    uint8_t currentButtonStatus = GPIO_ReadInputDataBit(GPIOA, USER_BUTTON);
-
-    if (lastButtonStatus != currentButtonStatus && currentButtonStatus != RESET) {
-        ++counter;
-        sendMessage();
-        
-        GPIO_ResetBits(GPIOD, LEDS);
-        GPIO_SetBits(GPIOD, LED[counter % 4]);
+    if (GPIO_ReadInputDataBit(GPIOA, USER_BUTTON)) {
+	sendMessage(MFSW_VOL_DOWN);
+        GPIO_SetBits(GPIOG, LEDS);
+    } else {
+        GPIO_ResetBits(GPIOG, LEDS);
     }
-    lastButtonStatus = currentButtonStatus;
 }
 
 void initLeds() {
@@ -92,24 +85,24 @@ void delay(uint32_t ms) {
     }
 }
 
-void sendMessage()
+void sendMessage(uint8_t *msg)
 {
-	CanTxMsg TxMessage;
-	TxMessage.StdId=0x71;
-  
-	TxMessage.RTR=CAN_RTR_DATA;
-	TxMessage.IDE=CAN_ID_EXT;
-	TxMessage.DLC=8;
-	TxMessage.ExtId=6;
-	TxMessage.Data[0]=0xaa;
-	TxMessage.Data[1]=0xbb;
-	TxMessage.Data[2]=0xcc;
-	TxMessage.Data[3]=0x11;
-	TxMessage.Data[4]=0x22;
-	TxMessage.Data[5]=0x33;
-	TxMessage.Data[6]=0x44;
-	TxMessage.Data[7]=0x55;
-	
-	//uint8_t result = 
-	CAN_Transmit(CAN1, &TxMessage);  
+    CanTxMsg TxMessage;
+
+    TxMessage.RTR = CAN_RTR_DATA;
+    TxMessage.IDE = CAN_ID_STD;
+    // Specifies the length of the frame that will be transmitted. This parameter can be a value between 0 and 8
+    TxMessage.DLC = sizeof(msg); // 2
+
+    // Specifies the standard identifier. This parameter can be a value between 0 and 0x7FF.
+    TxMessage.StdId = 0x5c1;
+
+    memcpy(&TxMessage.Data, &msg, sizeof TxMessage.Data);
+
+//    TxMessage.Data  = msg;
+//    TxMessage.Data[0] = 0x39;
+//    TxMessage.Data[1] = 0x06;
+
+    //uint8_t result =
+    CAN_Transmit(CAN1, &TxMessage);
 }

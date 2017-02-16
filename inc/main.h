@@ -3,9 +3,19 @@
 #include "stm32f4xx_rcc.h"
 #include "stm32f4xx_can.h"
 
-const uint16_t LEDS = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
-const uint16_t LED[4] = {GPIO_Pin_12, GPIO_Pin_13, GPIO_Pin_14, GPIO_Pin_15};
+#include <string.h>
+
+const uint16_t LEDS = GPIO_Pin_13 | GPIO_Pin_14;
 const uint16_t USER_BUTTON = GPIO_Pin_0;
+
+//uint8_t MFSW_NONE[]         = {0x39, 0x00}; // Button released
+//uint8_t MFSW_PREV[]         = {0x39, 0x02};
+//uint8_t MFSW_NEXT[]         = {0x39, 0x03};
+//uint8_t MFSW_SCAN_UP[]      = {0x39, 0x04};
+//uint8_t MFSW_SCAN_DOWN[]    = {0x39, 0x05};
+uint8_t MFSW_VOL_UP[]       = {0x39, 0x06};
+uint8_t MFSW_VOL_DOWN[]     = {0x39, 0x07};
+//uint8_t MFSW_VOL_PRESSED[]  = {0x3B, 0xA7};
 
 void init();
 void loop();
@@ -16,4 +26,4 @@ void initLeds();
 void initButton();
 void initCan();
 
-void sendMessage();
+void sendMessage(uint8_t *msg);
