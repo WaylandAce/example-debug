@@ -14,6 +14,7 @@ SOURCES += \
 			$(PERIPH)/src/stm32f4xx_gpio.c \
 			$(PERIPH)/src/stm32f4xx_i2c.c \
 			$(PERIPH)/src/stm32f4xx_rcc.c \
+			$(PERIPH)/src/stm32f4xx_can.c \
 			$(PERIPH)/src/stm32f4xx_spi.c \
 			$(PERIPH)/src/stm32f4xx_exti.c \
 			$(PERIPH)/src/stm32f4xx_syscfg.c \

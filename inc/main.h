@@ -1,6 +1,7 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_gpio.h"
 #include "stm32f4xx_rcc.h"
+#include "stm32f4xx_can.h"
 
 const uint16_t LEDS = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
 const uint16_t LED[4] = {GPIO_Pin_12, GPIO_Pin_13, GPIO_Pin_14, GPIO_Pin_15};
@@ -13,4 +14,6 @@ void delay();
 
 void initLeds();
 void initButton();
+void initCan();
 
+void sendMessage();
