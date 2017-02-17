@@ -5,7 +5,13 @@
 
 #include <string.h>
 
-const uint16_t LEDS = GPIO_Pin_13 | GPIO_Pin_14;
+const uint16_t LED_GREEN = GPIO_Pin_12;
+const uint16_t LED_ORANGE = GPIO_Pin_13;
+const uint16_t LED_RED = GPIO_Pin_14;
+const uint16_t LED_BLUE = GPIO_Pin_15;
+
+const uint16_t LEDS = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
+
 const uint16_t USER_BUTTON = GPIO_Pin_0;
 
 const uint16_t CAN_RX_PIN = GPIO_Pin_11;
@@ -29,4 +35,4 @@ void initLeds();
 void initButton();
 void initCan();
 
-void sendMessage(uint8_t *msg);
+void canSend(uint8_t *msg);

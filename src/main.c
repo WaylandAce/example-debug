@@ -25,11 +25,11 @@ void init()
 
 void loop()
 {
+    // reset all leds state
+    GPIO_ResetBits(GPIOD, LEDS);
+
     if (GPIO_ReadInputDataBit(GPIOA, USER_BUTTON)) {
-	sendMessage(MFSW_VOL_DOWN);
-        GPIO_SetBits(GPIOD, LEDS);
-    } else {
-        GPIO_ResetBits(GPIOD, LEDS);
+	canSend(MFSW_VOL_DOWN);
     }
 }
 
@@ -95,22 +95,27 @@ void delay(uint32_t ms)
     }
 }
 
-void sendMessage(uint8_t *msg)
+void canSend(uint8_t *msg)
 {
     CanTxMsg TxMessage;
 
     TxMessage.RTR = CAN_RTR_DATA;
     TxMessage.IDE = CAN_ID_STD;
-    TxMessage.DLC = sizeof(msg); // 2
+    TxMessage.DLC = sizeof(msg);
 
     TxMessage.StdId = 0x5c1;
 
     memcpy(&TxMessage.Data, &msg, sizeof TxMessage.Data);
 
-//    TxMessage.Data  = msg;
+//    TxMessage.DLC = 2;
+//    TxMessage.Data = msg;
 //    TxMessage.Data[0] = 0x39;
 //    TxMessage.Data[1] = 0x06;
 
-    //uint8_t result =
-    CAN_Transmit(CAN1, &TxMessage);
+    uint8_t mailbox = CAN_Transmit(CAN1, &TxMessage);
+    if (CAN_TransmitStatus(CAN1, mailbox) == CANTXOK) {
+        GPIO_SetBits(GPIOD, LED_GREEN);
+    } else {
+        GPIO_SetBits(GPIOD, LED_RED);
+    }
 }
