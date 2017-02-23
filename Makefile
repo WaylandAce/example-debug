@@ -29,12 +29,14 @@ SOURCES += \
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
-INCLUDES += -I$(DEVICE) \
-			-I$(CORE) \
-			-I$(PERIPH)/inc \
-			-I$(DISCOVERY) \
-			-I$(USB)/inc \
-			-I.
+DEFINES += USE_STDPERIPH_DRIVER
+
+INCLUDES += $(DEVICE)
+INCLUDES += $(CORE)
+INCLUDES += $(PERIPH)/inc
+INCLUDES += $(DISCOVERY)
+INCLUDES += $(USB)/inc
+INCLUDES += .
 
 ELF = $(BUILDDIR)/$(PROJECT_NAME).elf
 HEX = $(BUILDDIR)/$(PROJECT_NAME).hex
@@ -46,10 +48,17 @@ AR = arm-none-eabi-ar
 OBJCOPY = arm-none-eabi-objcopy
 GDB = arm-none-eabi-gdb
 
-CFLAGS  = -O0 -g -Wall -I.\
-   -mcpu=cortex-m4 -mthumb \
-   -mfpu=fpv4-sp-d16 -mfloat-abi=hard \
-   $(INCLUDES) -DUSE_STDPERIPH_DRIVER
+
+CFLAGS += -mthumb -mcpu=cortex-m4 # архитектура и система комманд
+CFLAGS += -std=gnu99              # стандарт языка С
+CFLAGS += -Wall -pedantic         # Выводить все предупреждения
+CFLAGS += -Os                     # Оптимизация
+CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+CFLAGS += -ggdb                   # Генерировать отладочную информацию для gdb
+CFLAGS += -fno-builtin
+
+CFLAGS += $(addprefix -I, $(INCLUDES))
+CFLAGS += $(addprefix -D, $(DEFINES))
 
 LDSCRIPT = stm32_flash.ld
 LDFLAGS += -T$(LDSCRIPT) -mthumb -mcpu=cortex-m4 -nostdlib
