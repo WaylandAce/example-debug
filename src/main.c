@@ -29,7 +29,7 @@ void loop()
     GPIO_ResetBits(GPIOD, LEDS);
 
     if (GPIO_ReadInputDataBit(GPIOA, USER_BUTTON)) {
-	canSend(MFSW_VOL_DOWN);
+	canSend(MFSW, MFSW_VOL_DOWN);
     }
 }
 
@@ -95,7 +95,7 @@ void delay(uint32_t ms)
     }
 }
 
-void canSend(uint8_t *msg)
+void canSend(uint32_t id, const uint8_t *msg)
 {
     CanTxMsg TxMessage;
 
@@ -103,7 +103,7 @@ void canSend(uint8_t *msg)
     TxMessage.IDE = CAN_ID_STD;
     TxMessage.DLC = sizeof(msg);
 
-    TxMessage.StdId = 0x5c1;
+    TxMessage.StdId = id;
 
     memcpy(&TxMessage.Data, &msg, sizeof TxMessage.Data);
 
