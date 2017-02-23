@@ -82,5 +82,3 @@ all: $(HEX) $(BIN)
 .PHONY: clean
 clean:
 	rm -rf build
-flash:
-	st-flash write ./build/mfsw.bin 0x8000000
