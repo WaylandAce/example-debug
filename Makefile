@@ -11,25 +11,27 @@ USB = inc/usb
 #SOURCES += $(DISCOVERY)/src/stm32f4_discovery.c
 
 SOURCES += \
-			$(PERIPH)/src/stm32f4xx_gpio.c \
-			$(PERIPH)/src/stm32f4xx_i2c.c \
-			$(PERIPH)/src/stm32f4xx_rcc.c \
-			$(PERIPH)/src/stm32f4xx_can.c \
-			$(PERIPH)/src/stm32f4xx_spi.c \
-			$(PERIPH)/src/stm32f4xx_exti.c \
-			$(PERIPH)/src/stm32f4xx_syscfg.c \
-			$(PERIPH)/src/misc.c
+	$(PERIPH)/src/stm32f4xx_gpio.c \
+	$(PERIPH)/src/stm32f4xx_i2c.c \
+	$(PERIPH)/src/stm32f4xx_rcc.c \
+	$(PERIPH)/src/stm32f4xx_can.c \
+	$(PERIPH)/src/stm32f4xx_spi.c \
+	$(PERIPH)/src/stm32f4xx_exti.c \
+	$(PERIPH)/src/stm32f4xx_syscfg.c \
+	$(PERIPH)/src/misc.c
 
 SOURCES += startup_stm32f4xx.S
 #SOURCES += stm32f4xx_it.c
 SOURCES += system_stm32f4xx.c
 
 SOURCES += \
-		src/main.c
+	src/syscalls.c \
+	src/main.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 DEFINES += USE_STDPERIPH_DRIVER
+#DEFINES += __TARGET_FPU_VFP
 
 INCLUDES += $(DEVICE)
 INCLUDES += $(CORE)
@@ -53,7 +55,7 @@ CFLAGS += -mthumb -mcpu=cortex-m4 # архитектура и система к�
 CFLAGS += -std=gnu99              # стандарт языка С
 CFLAGS += -Wall -pedantic         # Выводить все предупреждения
 CFLAGS += -Os                     # Оптимизация
-CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=soft
 CFLAGS += -ggdb                   # Генерировать отладочную информацию для gdb
 CFLAGS += -fno-builtin
 

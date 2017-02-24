@@ -1,8 +1,10 @@
 #include "main.h"
-
+#include <stdio.h>
 
 int main()
 {
+    printf("Init");
+
     init();
 
     do {
