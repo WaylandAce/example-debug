@@ -1,9 +1,11 @@
 #include "main.h"
 #include "can.h"
 #include "settings.h"
+#include <stdio.h>
 
 int main()
 {
+    printf("Init");
     gpioInit();
     canInit();
 

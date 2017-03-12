@@ -26,11 +26,13 @@ SOURCES += system_stm32f4xx.c
 
 SOURCES += \
 	src/main.c \
-	src/can.c
+	src/can.c \
+	src/syscalls.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
 DEFINES += USE_STDPERIPH_DRIVER
+#DEFINES += __TARGET_FPU_VFP
 
 INCLUDES += $(DEVICE)
 INCLUDES += $(CORE)
@@ -54,7 +56,7 @@ CFLAGS += -mthumb -mcpu=cortex-m4 # архитектура и система к�
 CFLAGS += -std=gnu99              # стандарт языка С
 CFLAGS += -Wall -pedantic         # Выводить все предупреждения
 CFLAGS += -Os                     # Оптимизация
-CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=soft
 CFLAGS += -ggdb                   # Генерировать отладочную информацию для gdb
 CFLAGS += -fno-builtin
 
