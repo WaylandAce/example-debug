@@ -15,28 +15,17 @@
 
 int _read_r (struct _reent *r, int file, char * ptr, int len)
 {
-	r = r;
-	file = file;
-	ptr = ptr;
-	len = len;
 	errno = EINVAL;
 	return -1;
 }
 
 int _lseek_r (struct _reent *r, int file, int ptr, int dir)
 {
-	r = r;
-	file = file;
-	ptr = ptr;
-	dir = dir;
 	return 0;
 }
 
 int _write_r (struct _reent *r, int file, char * ptr, int len)
 {
-	r = r;
-	file = file;
-	ptr = ptr;
 #ifdef USART_DEBUG
 	int index;
 	/* For example, output string by UART */
@@ -86,8 +75,6 @@ caddr_t _sbrk_r (struct _reent *r, int incr)
 
 int _fstat_r (struct _reent *r, int file, struct stat * st)
 {
-	r = r;
-	file = file;
 	memset (st, 0, sizeof (* st));
 	st->st_mode = S_IFCHR;
 	return 0;
@@ -96,8 +83,6 @@ int _fstat_r (struct _reent *r, int file, struct stat * st)
 
 int _isatty_r(struct _reent *r, int fd)
 {
-	r = r;
-	fd = fd;
 	return 1;
 }
 
