@@ -11,21 +11,22 @@ USB = inc/usb
 #SOURCES += $(DISCOVERY)/src/stm32f4_discovery.c
 
 SOURCES += \
-			$(PERIPH)/src/stm32f4xx_gpio.c \
-			$(PERIPH)/src/stm32f4xx_i2c.c \
-			$(PERIPH)/src/stm32f4xx_rcc.c \
-			$(PERIPH)/src/stm32f4xx_can.c \
-			$(PERIPH)/src/stm32f4xx_spi.c \
-			$(PERIPH)/src/stm32f4xx_exti.c \
-			$(PERIPH)/src/stm32f4xx_syscfg.c \
-			$(PERIPH)/src/misc.c
+	$(PERIPH)/src/stm32f4xx_gpio.c \
+	$(PERIPH)/src/stm32f4xx_i2c.c \
+	$(PERIPH)/src/stm32f4xx_rcc.c \
+	$(PERIPH)/src/stm32f4xx_can.c \
+	$(PERIPH)/src/stm32f4xx_spi.c \
+	$(PERIPH)/src/stm32f4xx_exti.c \
+	$(PERIPH)/src/stm32f4xx_syscfg.c \
+	$(PERIPH)/src/misc.c
 
 SOURCES += startup_stm32f4xx.S
 #SOURCES += stm32f4xx_it.c
 SOURCES += system_stm32f4xx.c
 
 SOURCES += \
-		src/main.c
+	src/main.c \
+	src/can.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
