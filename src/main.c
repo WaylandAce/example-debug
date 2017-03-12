@@ -37,11 +37,13 @@ void gpioInit()
     GPIO_PinAFConfig(GPIOA, GPIO_PinSource12, GPIO_AF_CAN1); //CAN_TX = PA12
 
     // leds init
+    GPIO_StructInit(&gpio);
     gpio.GPIO_Mode = GPIO_Mode_OUT;
     gpio.GPIO_Pin = LEDS;
     GPIO_Init(GPIOD, &gpio);
 
     // buttons init
+    GPIO_StructInit(&gpio);
     gpio.GPIO_Mode = GPIO_Mode_IN;
     gpio.GPIO_Pin = USER_BUTTON;
     GPIO_Init(GPIOA, &gpio);
