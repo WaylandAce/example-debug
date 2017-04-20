@@ -10,8 +10,8 @@ const uint16_t LEDS = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
 
 const uint16_t USER_BUTTON = GPIO_Pin_0;
 
-const uint16_t CAN_RX_PIN = GPIO_Pin_11;
-const uint16_t CAN_TX_PIN = GPIO_Pin_12;
+//const uint16_t CAN_RX_PIN = GPIO_Pin_11;
+//const uint16_t CAN_TX_PIN = GPIO_Pin_12;
 
 //uint8_t MFSW_NONE[]         = {0x39, 0x00}; // Button released
 //uint8_t MFSW_PREV[]         = {0x39, 0x02};

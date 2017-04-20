@@ -26,7 +26,6 @@ SOURCES += system_stm32f4xx.c
 
 SOURCES += \
 	src/main.c \
-	src/can.c \
 	src/syscalls.c
 
 OBJECTS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SOURCES))))
