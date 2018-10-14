@@ -97,12 +97,12 @@ void canInit()
     can.CAN_NART = ENABLE; // non-automatic retransmission mode = ENABLE (To prevent endless spam)
     can.CAN_RFLM = DISABLE;
     can.CAN_TXFP = DISABLE;
-    can.CAN_Mode = CAN_Mode_Normal;
+    can.CAN_Mode = CAN_Mode_Normal; // CAN_MODE_SILENT
 
     can.CAN_SJW       = CAN_SJW_1tq; // synchronization jump width = 1
-    can.CAN_BS1       = CAN_BS1_14tq; // 14 time quantum
-    can.CAN_BS2       = CAN_BS2_6tq;
-    can.CAN_Prescaler = 20; // 100 kbit/s
+    can.CAN_BS1       = CAN_BS1_6TQ;
+    can.CAN_BS2       = CAN_BS2_3TQ;
+    can.CAN_Prescaler = 42; // 100 kbit/s
 
     // Bitrate = CAN_CLK / (CAN_Prescaler * (1 + CAN_BS1 + CAN_BS2 + CAN_SJW)).
     CAN_Init(CAN1, &can);
