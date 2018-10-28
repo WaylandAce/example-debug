@@ -4,14 +4,13 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_gpio.h"
 #include "stm32f4xx_rcc.h"
-#include "stm32f4xx_can.h"
-
+#include "stm32f4xx_usart.h"
 #include <string.h>
 
-void gpioInit();
-void loop();
-void delay();
-void canInit();
-uint8_t canSend(uint32_t id, const uint8_t *msg);
+void initUsart();
+void initLeds();
+void delay(uint32_t ms);
+void sendUart();
+unsigned char USART_ReadByteSync(USART_TypeDef *USARTx);
 
 #endif /* main_h */
