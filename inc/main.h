@@ -10,7 +10,7 @@
 void initUsart();
 void initLeds();
 void delay(uint32_t ms);
-void sendUart();
-unsigned char USART_ReadByteSync(USART_TypeDef *USARTx);
+void send_to_uart(uint8_t data);
+void send_str(char * string);
 
 #endif /* main_h */
